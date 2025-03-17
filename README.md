@@ -27,7 +27,7 @@ This project aims to solve these issues by providing a simple group expense trac
 
 ---
 
-## 2. Objective and Key Features
+## 2. Objective
 
 ### Project Objective
 Develop a **full-stack web application** using **Next.js** that enables users to **create trip groups, add expenses, track balances, and settle debts efficiently**, all while ensuring **data integrity, security, and collaboration**.
@@ -39,17 +39,17 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - **Cloud Storage**: AWS S3 for receipt file handling.
 - **Authentication**: NextAuth.js with Google OAuth.
 
----
-### Core Features & Functionality
+
+## 3. Core Features & Functionality
 
 
-### User Authentication & Authorization
+### A. User Authentication & Authorization
 - Google OAuth-based authentication via NextAuth.js.
 - Secure session management using JWT and server-side validation.
 - Role-based access control to ensure only group members can add expenses or settle debts.
 ---
 
-### Home Page (`/`)
+### B. Home Page (`/`)
 - Displays **user’s avatar** and a **list of groups** that the user is part of.
 - **Buttons:**
   - `Create a Group`: Allows users to create a new group with a trip name and description.
@@ -57,7 +57,7 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - **Loading and error handling** for fetching user groups.
 
 ---
-### Group Page (`/group/[id]`)
+### C. Group Page (`/group/[id]`)
 #### **Left Panel**
 - Displays the **list of users** in the group.
 
@@ -82,7 +82,7 @@ Develop a **full-stack web application** using **Next.js** that enables users to
   ```math
   (Total Expense) / (Number of Participants + 1) = Amount Each Participant Owes
   ```
----
+
 #### **Settle Button (Group Creator Only)**
 - Computes and simplifies transactions to determine who owes whom.
 - Displays **minimal set of payments needed** to settle the group debts.
@@ -92,7 +92,7 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - Users can **copy & share** the code to invite others.
 
 ---
-### Expense Management (Modal)
+### D. Expense Management (Modal)
 #### **Modal Form Fields**
 - **Expense Description** (Required, text input)
 - **Amount** (Required, decimal input)
@@ -102,7 +102,7 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - **Upload Receipt** (Optional, file upload to AWS S3)
 
 ---
-### Edit Expense Route (`/group/[id]/edit-expense/[expenseId]`)
+### E. Edit Expense Route (`/group/[id]/edit-expense/[expenseId]`)
 #### **Page Layout**
 - **Main heading:** `Edit Expense`
 - **Pre-populated form** with existing expense details.
@@ -116,7 +116,7 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - **Upload Receipt** (Optional, allows replacing existing receipt)
 
 ---
-### Delete Functionality
+### F. Delete Functionality
 - Each expense should have a **`Delete Expense`** button.
 - Clicking the delete button triggers a **confirmation dialog**:
   "Are you sure you want to delete [expense description]?"
@@ -129,7 +129,7 @@ Develop a **full-stack web application** using **Next.js** that enables users to
   - Displays `Error deleting expense`.
 
 ---
-### Settle Debts (`/group/[id]/settle`)
+### G. Settle Debts (`/group/[id]/settle`)
 - Only the **group creator** can click `Settle`.
 - Computes a **final settlement summary**.
 - `Mark as Settled` updates the database & notifies group members.
@@ -137,7 +137,8 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - Stores **settlement history** for future reference.
 
 ---
-## **Database Schema**
+
+## 4. **Database Schema**
 
 ### Tables
 
@@ -222,7 +223,7 @@ Ref: expense_participants.user_id > users.id
 Ref: expense_media.expense_id > expenses.id
 ```
 
-## 3. Tentative Plan
+## 5. Tentative Plan
 ### Step-by-Step Implementation
 
 #### **Week 1-2: Project Setup & Authentication**
@@ -250,7 +251,7 @@ Ref: expense_media.expense_id > expenses.id
 - Final testing, bug fixes, and preparation of final report & video demo.
 
 ---
-## 4. Team Responsibilities
+## 6. Team Responsibilities
 Since this project is developed by **two partners**, the responsibilities are split as follows:
 
 ### **Partner 1: Frontend & UI Development**
