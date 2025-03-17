@@ -40,13 +40,14 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - **Authentication**: NextAuth.js with Google OAuth.
 
 ---
+### Core Features & Functionality
 
-## Core Features & Functionality
 
 ### User Authentication & Authorization
 - Google OAuth-based authentication via NextAuth.js.
 - Secure session management using JWT and server-side validation.
 - Role-based access control to ensure only group members can add expenses or settle debts.
+---
 
 ### Home Page (`/`)
 - Displays **user’s avatar** and a **list of groups** that the user is part of.
@@ -55,6 +56,7 @@ Develop a **full-stack web application** using **Next.js** that enables users to
   - `Join a Group`: Users can enter an invitation code to join an existing group.
 - **Loading and error handling** for fetching user groups.
 
+---
 ### Group Page (`/group/[id]`)
 #### **Left Panel**
 - Displays the **list of users** in the group.
@@ -73,14 +75,14 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 
 #### **Submit New Expense Button**
 - Allows users to **submit a new expense** paid by them.
-- Redirects to **Expense Management**.
+- Opens **Expense Management** modal form.
 - Users can select which group members owe them.
 - **Default**: All group members split the expense equally.
 - **Formula**:
   ```math
   (Total Expense) / (Number of Participants + 1) = Amount Each Participant Owes
   ```
-
+---
 #### **Settle Button (Group Creator Only)**
 - Computes and simplifies transactions to determine who owes whom.
 - Displays **minimal set of payments needed** to settle the group debts.
@@ -89,8 +91,9 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - Displayed prominently on the **Group Page**.
 - Users can **copy & share** the code to invite others.
 
-### Expense Management (`/group/[id]/add-expense`)
-#### **Form Fields**
+---
+### Expense Management (Modal)
+#### **Modal Form Fields**
 - **Expense Description** (Required, text input)
 - **Amount** (Required, decimal input)
 - **Paid by** (Dropdown of group members)
@@ -98,7 +101,7 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - **Category Selection** (Food, Travel, Lodging, Miscellaneous)
 - **Upload Receipt** (Optional, file upload to AWS S3)
 
-
+---
 ### Edit Expense Route (`/group/[id]/edit-expense/[expenseId]`)
 #### **Page Layout**
 - **Main heading:** `Edit Expense`
@@ -112,7 +115,7 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - **Category Selection** (Dropdown: Food, Travel, Lodging, Miscellaneous)
 - **Upload Receipt** (Optional, allows replacing existing receipt)
 
-
+---
 ### Delete Functionality
 - Each expense should have a **`Delete Expense`** button.
 - Clicking the delete button triggers a **confirmation dialog**:
@@ -125,7 +128,7 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - **If deletion fails**:
   - Displays `Error deleting expense`.
 
-
+---
 ### Settle Debts (`/group/[id]/settle`)
 - Only the **group creator** can click `Settle`.
 - Computes a **final settlement summary**.
@@ -134,7 +137,6 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - Stores **settlement history** for future reference.
 
 ---
-
 ## **Database Schema**
 
 ### Tables
