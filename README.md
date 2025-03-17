@@ -89,8 +89,6 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - Displayed prominently on the **Group Page**.
 - Users can **copy & share** the code to invite others.
 
----
-
 ### Expense Management (`/group/[id]/add-expense`)
 #### **Form Fields**
 - **Expense Description** (Required, text input)
@@ -100,7 +98,6 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - **Category Selection** (Food, Travel, Lodging, Miscellaneous)
 - **Upload Receipt** (Optional, file upload to AWS S3)
 
----
 
 ### Edit Expense Route (`/group/[id]/edit-expense/[expenseId]`)
 #### **Page Layout**
@@ -115,7 +112,6 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - **Category Selection** (Dropdown: Food, Travel, Lodging, Miscellaneous)
 - **Upload Receipt** (Optional, allows replacing existing receipt)
 
----
 
 ### Delete Functionality
 - Each expense should have a **`Delete Expense`** button.
@@ -129,7 +125,6 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 - **If deletion fails**:
   - Displays `Error deleting expense`.
 
----
 
 ### Settle Debts (`/group/[id]/settle`)
 - Only the **group creator** can click `Settle`.
@@ -141,7 +136,6 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 ---
 
 ## **Database Schema**
-## Database Structure for Expense-Sharing App
 
 ### Tables
 
