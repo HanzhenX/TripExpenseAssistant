@@ -165,7 +165,7 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 
 This ensures that the **TripMate** project fully meets all core requirements and implements multiple advanced features.
 
-## 4. **Database Schema**
+## 5. **Database Schema**
 
 ### Tables
 
@@ -250,7 +250,7 @@ Ref: expense_participants.user_id > users.id
 Ref: expense_media.expense_id > expenses.id
 ```
 
-## 5. Tentative Plan
+## 6. Tentative Plan
 ### Step-by-Step Implementation
 
 #### **Week 1-2: Project Setup & Authentication**
@@ -278,7 +278,7 @@ Ref: expense_media.expense_id > expenses.id
 - Final testing, bug fixes, and preparation of final report & video demo.
 
 ---
-## 6. Team Responsibilities
+## 7. Team Responsibilities
 Since this project is developed by **two partners**, the responsibilities are split as follows:
 
 ### **Partner 1: Frontend & UI Development**
