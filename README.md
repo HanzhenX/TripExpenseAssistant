@@ -138,6 +138,33 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 
 ---
 
+## 4. Course Project Requirement Checklist
+
+### Core Technical Requirements 
+- ✅ **Frontend Requirements**
+  - **React or Next.js for UI development** → Implementing with **Next.js**.
+  - **Tailwind CSS for styling** 
+  - **shadcn/ui or similar component libraries** → Forms and modals from shadcn/ui are used.
+  - **Responsive design implementation** → Short forms use modal to make the experience responsive.
+
+- ✅ **Data Storage Requirements**
+  - **PostgreSQL or SQLite for relational database** → Using **PostgreSQL**.
+  - **Cloud storage for file handling** → Implementing **AWS S3** for uploading and storing receipts.
+
+### Architecture Approach
+- ✅ **Option A: Next.js Full-Stack**
+  - **Next.js 13+ with App Router** 
+  - **Server Components for backend logic**
+  - **API Routes for data handling**
+  - **Server Actions for mutations**
+
+### Advanced Features (Must Implement at Least Two)
+- ✅ **User authentication and authorization** → Implementing **Google OAuth authentication** via **NextAuth.js**.
+
+- ✅ **File handling and processing** → **AWS S3 integration** for **receipt uploads**.
+
+This ensures that the **TripMate** project fully meets all core requirements and implements multiple advanced features.
+
 ## 4. **Database Schema**
 
 ### Tables
