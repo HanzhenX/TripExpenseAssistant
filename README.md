@@ -91,8 +91,8 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 
 ---
 
-## Expense Management (`/group/[id]/add-expense`)
-### **Form Fields**
+### Expense Management (`/group/[id]/add-expense`)
+#### **Form Fields**
 - **Expense Description** (Required, text input)
 - **Amount** (Required, decimal input)
 - **Paid by** (Dropdown of group members)
@@ -102,12 +102,12 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 
 ---
 
-## Edit Expense Route (`/group/[id]/edit-expense/[expenseId]`)
-### **Page Layout**
+### Edit Expense Route (`/group/[id]/edit-expense/[expenseId]`)
+#### **Page Layout**
 - **Main heading:** `Edit Expense`
 - **Pre-populated form** with existing expense details.
 
-### **Form Fields**
+#### **Form Fields**
 - **Expense Description** (Required, text input)
 - **Amount** (Required, decimal input, min=0.01)
 - **Paid By** (Dropdown of group members; defaults to original payer)
@@ -117,7 +117,7 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 
 ---
 
-## Delete Functionality
+### Delete Functionality
 - Each expense should have a **`Delete Expense`** button.
 - Clicking the delete button triggers a **confirmation dialog**:
   "Are you sure you want to delete [expense description]?"
@@ -131,7 +131,7 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 
 ---
 
-## Settle Debts (`/group/[id]/settle`)
+### Settle Debts (`/group/[id]/settle`)
 - Only the **group creator** can click `Settle`.
 - Computes a **final settlement summary**.
 - `Mark as Settled` updates the database & notifies group members.
@@ -141,40 +141,90 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 ---
 
 ## **Database Schema**
-### Users Table
-```sql
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  auth_id VARCHAR(255) UNIQUE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+## Database Structure for Expense-Sharing App
+
+### Tables
+
+#### Users
+```
+Table users {
+  id integer [primary key]
+  name varchar
+  email varchar [unique, not null]
+  created_at timestamp
+}
 ```
 
-### Groups Table
-```sql
-CREATE TABLE groups (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  created_by INT REFERENCES users(id) ON DELETE CASCADE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+#### Groups
+```
+Table groups {
+  id integer [primary key]
+  name varchar [not null]
+  manager_id integer [not null]
+  status varchar [not null, default: 'active']
+  settled_at timestamp
+  created_at timestamp
+}
 ```
 
-### Transactions Table
-```sql
-CREATE TABLE transactions (
-  id SERIAL PRIMARY KEY,
-  group_id INT REFERENCES groups(id) ON DELETE CASCADE,
-  description TEXT NOT NULL,
-  total_amount DECIMAL(10,2) NOT NULL,
-  paid_by INT REFERENCES users(id) ON DELETE SET NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+#### Group Members
+```
+Table group_members {
+  id integer [primary key]
+  group_id integer [not null]
+  user_id integer [not null]
+  joined_at timestamp
+}
 ```
 
----
+#### Expenses
+```
+Table expenses {
+  id integer [primary key]
+  group_id integer [not null]
+  created_by integer [not null]
+  name varchar [not null]
+  amount decimal(10,2) [not null]
+  paid_by integer [not null]
+  notes text
+  created_at timestamp
+}
+```
+
+#### Expense Participants
+```
+Table expense_participants {
+  id integer [primary key]
+  expense_id integer [not null]
+  user_id integer [not null]
+  share decimal(10,2) [not null]
+}
+```
+
+#### Expense Media
+```
+Table expense_media {
+  id integer [primary key]
+  expense_id integer [not null]
+  media_url varchar [not null]
+  media_type varchar [not null, default: 'image']
+  uploaded_at timestamp
+}
+```
+
+### Relationships
+
+```
+Ref: groups.manager_id > users.id
+Ref: group_members.group_id > groups.id
+Ref: group_members.user_id > users.id
+Ref: expenses.group_id > groups.id
+Ref: expenses.created_by > users.id
+Ref: expenses.paid_by > users.id
+Ref: expense_participants.expense_id > expenses.id
+Ref: expense_participants.user_id > users.id
+Ref: expense_media.expense_id > expenses.id
+```
 
 ## 3. Tentative Plan
 ### Step-by-Step Implementation
