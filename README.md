@@ -131,8 +131,8 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 ---
 ### G. Settle Debts (`/group/[id]/settle`)
 - Only the **group creator** can click `Settle`.
-- Computes a **final settlement summary**.
-- `Mark as Settled` updates the database & notifies group members.
+- Computes a **final settlement summary** and shows it in a modal, waiting for **group creator** to `Confirm`.
+- After `Confirm`, updates the database & notifies group members.
 - Allows **manual payment recording**.
 - Stores **settlement history** for future reference.
 
