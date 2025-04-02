@@ -1,0 +1,16 @@
+# Node modules (both in root and parent dir — double-check why ../node_modules exists)
+node_modules/
+../node_modules/
+
+# Environment variables
+.env
+
+# Build output
+.next/
+
+# OS or IDE stuff (just in case)
+.DS_Store
+
+# Optional: lock files in parent dir if you only want to track the ones in your project folder
+../package-lock.json
+../package.json
