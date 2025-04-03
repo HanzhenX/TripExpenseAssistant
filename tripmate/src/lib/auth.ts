@@ -2,7 +2,8 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "@/lib/prisma";
 import { authClient } from "@/lib/auth-client";
-import { redirect } from "next/navigation";
+import { nextCookies } from "better-auth/next-js";
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -30,18 +31,26 @@ export const auth = betterAuth({
       },
     },
   },
+  plugins: [nextCookies()], // make sure this is the last plugin in the array
 });
 
-export async function getLoggedInUser() {
+export async function getCurrentUser() {
+  console.log("🛠 getCurrentUser called");
+
   const session = (await authClient.getSession()) as {
     user?: { email?: string };
   };
+
+  console.log("Session:", session);
+  console.log("Email:", session?.user?.email);
 
   if (!session?.user?.email) return null;
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
   });
+
+  console.log("User:", user);
 
   return user ?? null;
 }

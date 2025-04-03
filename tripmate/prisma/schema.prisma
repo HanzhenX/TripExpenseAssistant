@@ -68,13 +68,19 @@ model Verification {
   @@map("verification")
 }
 
+enum GroupState {
+  active
+  settled
+  hidden
+}
+
 model Group {
-  id           String        @id @default(uuid())
-  name         String
-  settled      Boolean       @default(false)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  members      UserGroup[]
+  id        String        @id @default(uuid())
+  name      String
+  state     GroupState    @default(active)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  members   UserGroup[]
   transactions Transaction[]
 
   @@map("group")
@@ -100,7 +106,6 @@ model Transaction {
   paidByUserId String
   amount       Float
   description  String?
-  settled      Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 

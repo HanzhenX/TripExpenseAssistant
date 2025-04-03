@@ -46,7 +46,12 @@ export function LoginForm({
         <Button
           variant="outline"
           className="w-full"
-          onClick={() => authClient.signIn.social({ provider: "github" })}
+          onClick={() =>
+            authClient.signIn.social({
+              provider: "github",
+              callbackURL: "/dashboard",
+            })
+          }
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path
