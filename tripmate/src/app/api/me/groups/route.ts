@@ -1,9 +1,14 @@
-import { getCurrentUser } from "@/lib/auth";
+/*
+Currently depreciated for api authentication requires cookie.
+*/
+
+import { apiGetCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET() {
-  const user = await getCurrentUser();
+export async function GET(req: Request) {
+  const user = await apiGetCurrentUser(req.headers);
+
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

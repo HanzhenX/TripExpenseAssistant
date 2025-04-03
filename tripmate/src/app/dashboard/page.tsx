@@ -1,58 +1,48 @@
-"use client";
-
-import { useState } from "react";
 import { TopBar } from "@/components/top-bar"; // or use SiteHeader if preferred
-import { GroupCard } from "@/components/group-card";
-import { AddGroupCard } from "@/components/add-group-card";
+import { getCurrentUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { ClientGroupGrid } from "@/components/dashboard/client-group-grid";
+import prisma from "@/lib/prisma";
 
-const mockGroups = Array.from({ length: 12 }).map((_, i) => ({
-  id: i,
-  name: `Group ${i + 1}`,
-  members: [
-    {
-      name: "Alice",
-      avatar: `https://api.dicebear.com/7.x/lorelei/png?seed=alice${i}`,
-    },
-    {
-      name: "Bob",
-      avatar: `https://api.dicebear.com/7.x/lorelei/png?seed=bob${i}`,
-    },
-    {
-      name: "Carol",
-      avatar: `https://api.dicebear.com/7.x/lorelei/png?seed=carol${i}`,
-    },
-    {
-      name: "Dan",
-      avatar: `https://api.dicebear.com/7.x/lorelei/png?seed=dan${i}`,
-    },
-  ],
-}));
+export default async function Page() {
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
 
-export default function Page() {
-  const [showAll, setShowAll] = useState(false);
-  const visibleGroups = showAll ? mockGroups : mockGroups.slice(0, 7);
+
+/*
+Currently depreciated, api fetch authentication requires cookie.
+*/
+
+// const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/me/groups`, {
+//   cache: "no-store",
+// });
+
+// if (!res.ok) {
+//   const errorText = await res.text();
+//   console.error("Failed to fetch user groups:", res.status, errorText);
+//   throw new Error(`Failed to fetch user groups: ${res.status}`);
+// }
+
+// const groups = await res.json();
+
+  const groups = await prisma.userGroup.findMany({
+    where: {
+      userId: user.id,
+      group: {
+        state: {
+          not: "hidden",
+        },
+      },
+    },
+    include: { group: true },
+    orderBy: [{ group: { state: "asc" } }, { group: { createdAt: "desc" } }],
+  });
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <TopBar />{" "}
-      {/* Replace with <SiteHeader /> if you're using that instead */}
+      <TopBar />
       <main className="flex flex-1 flex-col p-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {visibleGroups.map((group) => (
-            <GroupCard key={group.id} group={group} />
-          ))}
-          <AddGroupCard />
-        </div>
-        {!showAll && mockGroups.length > 7 && (
-          <div className="mt-6 flex justify-center">
-            <button
-              className="rounded-lg bg-primary px-4 py-2 text-white hover:bg-primary/90"
-              onClick={() => setShowAll(true)}
-            >
-              Show more
-            </button>
-          </div>
-        )}
+        <ClientGroupGrid groups={groups} />
       </main>
     </div>
   );
