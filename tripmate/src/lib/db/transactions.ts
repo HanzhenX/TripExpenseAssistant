@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 
-export async function addTransaction(data: {
+export async function createTransaction(data: {
   groupId: string;
   amount: number;
   description?: string;
@@ -29,6 +29,6 @@ export async function addTransaction(data: {
       description: data.description,
     },
   });
-
+  console.log("✅ Successfully created transaction: ", transaction);
   return transaction;
 }

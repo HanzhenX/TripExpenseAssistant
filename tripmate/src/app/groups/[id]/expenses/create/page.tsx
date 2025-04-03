@@ -1,42 +1,63 @@
-"use client"
+"use client";
 
-import { useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { createExpense } from "@/lib/actions"
+} from "@/components/ui/select";
+import { createExpenseAction } from "./actions";
+import { RequiredExtensionArgs } from "@prisma/client/runtime/library";
+import { useRequireSession } from "@/lib/hooks/use-require-session";
+import { Form } from "react-hook-form";
 
-const categories = ["Food", "Travel", "Lodging", "Miscellaneous"]
+const categories = ["Food", "Travel", "Lodging", "Miscellaneous"];
 
 export default function NewExpensePage({ params }: { params: { id: string } }) {
-  const router = useRouter()
-  const groupId = params.id
-  const [isPending, startTransition] = useTransition()
-  const [message, setMessage] = useState<string | null>(null)
-  const [category, setCategory] = useState<string>("")
+  const router = useRouter();
+  const { id: groupId } = params;
+  const [isPending, startTransition] = useTransition();
+  const [message, setMessage] = useState<string | null>(null);
+  const [category, setCategory] = useState<string>("");
 
+  const { session, authLoading } = useRequireSession();
+  if (authLoading || !session) {
+    return <p>Loading...</p>;
+  }
   const handleSubmit = (formData: FormData) => {
-    formData.set("groupId", groupId)
-    formData.set("category", category)
+    const amount = formData.get("amount")?.toString() ?? "";
+    const description = formData.get("description")?.toString() ?? "";
+    const receipt = formData.get("receipt") as File | null;
+
+    formData.set("groupId", groupId);
+    formData.set("userId", session.user.id);
+    formData.set("amount", amount);
+    formData.set("description", description);
+    formData.set("category", category);
+    if (receipt) {
+      formData.set("receipt", receipt);
+    }
 
     startTransition(async () => {
-      const result = await createExpense(formData)
-      if (result?.error) {
-        setMessage(result.error)
-      } else {
-        router.push(`/groups/${groupId}`)
+      try {
+        await createExpenseAction(formData);
+        setMessage("Expense successfully added!");
+        setTimeout(() => {
+          router.push(`/groups/${groupId}`);
+        }, 1000);
+      } catch (error: any) {
+        console.error(error);
+        setMessage("Failed to add expense. Please try again.");
       }
-    })
-  }
+    });
+  };
 
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
@@ -80,5 +101,5 @@ export default function NewExpensePage({ params }: { params: { id: string } }) {
         {message && <p className="text-sm text-red-500 mt-2">{message}</p>}
       </form>
     </div>
-  )
+  );
 }
