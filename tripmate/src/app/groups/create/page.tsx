@@ -8,14 +8,14 @@ import { useRequireSession } from "@/lib/hooks/use-require-session";
 
 export default function Page() {
   // Check if user is logged in on client side
+  const router = useRouter();
+  const [message, setMessage] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+
   const { session, authLoading } = useRequireSession();
   if (authLoading || !session) {
     return <p>Loading...</p>;
   }
-
-  const router = useRouter();
-  const [message, setMessage] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
 
   const handleAction = async (formData: FormData) => {
     startTransition(async () => {
