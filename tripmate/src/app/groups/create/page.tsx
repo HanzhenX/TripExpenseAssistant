@@ -1,28 +1,21 @@
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createGroupAction } from "./actions";
-import { authClient } from "@/lib/auth-client";
+import { useRequireSession } from "@/lib/hooks/use-require-session";
 
 export default function Page() {
-  const { data: session, isPending: authLoading, error } = authClient.useSession();
-  const router = useRouter();
-
-  const [message, setMessage] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
-
-  // Redirect inside useEffect
-  useEffect(() => {
-    if (!authLoading && !session) {
-      router.push("/login");
-    }
-  }, [authLoading, session, router]);
-
+  // Check if user is logged in on client side
+  const { session, authLoading } = useRequireSession();
   if (authLoading || !session) {
     return <p>Loading...</p>;
   }
+
+  const router = useRouter();
+  const [message, setMessage] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
 
   const handleAction = async (formData: FormData) => {
     startTransition(async () => {
@@ -32,7 +25,9 @@ export default function Page() {
         setMessage("Group created successfully!");
         setTimeout(() => router.push("/dashboard"), 2000);
       } catch (err) {
-        setMessage(err instanceof Error ? err.message : "An unknown error occurred.");
+        setMessage(
+          err instanceof Error ? err.message : "An unknown error occurred."
+        );
       }
     });
   };
@@ -42,7 +37,9 @@ export default function Page() {
       <h1 className="text-2xl font-bold">Create a New Group</h1>
       <form action={handleAction} className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium">Group Name</label>
+          <label htmlFor="name" className="block text-sm font-medium">
+            Group Name
+          </label>
           <input
             type="text"
             id="name"
@@ -59,4 +56,3 @@ export default function Page() {
     </div>
   );
 }
-
