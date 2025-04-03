@@ -1,58 +1,58 @@
-"use server"
+// "use server"
 
-import prisma from "@/lib/prisma"
+// import prisma from "@/lib/prisma"
 
-export async function createGroup(formData: FormData) {
-  const name = formData.get("name")?.toString().trim()
+// export async function createGroup(formData: FormData) {
+//   const name = formData.get("name")?.toString().trim()
 
 
-  if (!name) return { error: "Group name is required" }
+//   if (!name) return { error: "Group name is required" }
   
 
-  try {
-    const newGroup = await prisma.group.create({
-      data: {
-        name,
-        status: "active", // optional: default is 'active'
-      },
-    })
+//   try {
+//     const newGroup = await prisma.group.create({
+//       data: {
+//         name,
+//         status: "active", // optional: default is 'active'
+//       },
+//     })
 
-    return { group: newGroup }
-  } catch (err) {
-    console.error("Error creating group:", err)
-    return { error: "Failed to create group" }
-  }
-}
-
-
+//     return { group: newGroup }
+//   } catch (err) {
+//     console.error("Error creating group:", err)
+//     return { error: "Failed to create group" }
+//   }
+// }
 
 
-export async function createExpense(formData: FormData) {
-  const name = formData.get("name")?.toString()
-  const amountStr = formData.get("amount")?.toString()
-  const groupIdStr = formData.get("groupId")?.toString()
 
-  if (!name || !amountStr || !groupIdStr) return { error: "Missing fields" }
 
-  const amount = parseFloat(amountStr)
-  const groupId = parseInt(groupIdStr)
+// export async function createExpense(formData: FormData) {
+//   const name = formData.get("name")?.toString()
+//   const amountStr = formData.get("amount")?.toString()
+//   const groupIdStr = formData.get("groupId")?.toString()
 
-  if (isNaN(amount) || amount <= 0) return { error: "Invalid amount" }
+//   if (!name || !amountStr || !groupIdStr) return { error: "Missing fields" }
 
-  try {
-    await prisma.expense.create({
-      data: {
-        name,
-        amount,
-        group: { connect: { id: groupId } },
-        createdBy: 1, // 👈 TODO: replace with actual user id when auth is added
-        paidBy: 1,
-      },
-    })
+//   const amount = parseFloat(amountStr)
+//   const groupId = parseInt(groupIdStr)
 
-    return {}
-  } catch (err) {
-    console.error("Error creating expense:", err)
-    return { error: "Failed to create expense" }
-  }
-}
+//   if (isNaN(amount) || amount <= 0) return { error: "Invalid amount" }
+
+//   try {
+//     await prisma.expense.create({
+//       data: {
+//         name,
+//         amount,
+//         group: { connect: { id: groupId } },
+//         createdBy: 1, // 👈 TODO: replace with actual user id when auth is added
+//         paidBy: 1,
+//       },
+//     })
+
+//     return {}
+//   } catch (err) {
+//     console.error("Error creating expense:", err)
+//     return { error: "Failed to create expense" }
+//   }
+// }

@@ -12,7 +12,7 @@ export function ClientGroupGrid({ groups }: { groups: any[] }) {
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {visibleGroups.map((group) => (
-          <GroupCard key={group.id} group={group} />
+          <GroupCard key={group.group.id} group={group.group} />
         ))}
         <AddGroupCard />
       </div>

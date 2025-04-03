@@ -1,31 +1,41 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { Card, CardHeader, CardTitle } from "@/components/ui/card"
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function GroupCard({
   group,
 }: {
-  group: { id: number; name: string; members: { name: string; avatar: string }[] }
+  group: {
+    id: string;
+    name: string;
+    members: {
+      user: {
+        name: string;
+        image: string;
+      };
+    }[];
+  };
 }) {
-  const router = useRouter()
-  const avatars = group.members.slice(0, 3)
-  const extraCount = group.members.length - 3
+  const router = useRouter();
+  // console.log("Tring to render: ", group);
+  const memberUsers = group.members.map((m) => m.user);
+  const avatars = memberUsers.slice(0, 3);
+  const extraCount = memberUsers.length - 3;
 
   return (
     <Card
-    className="cursor-pointer transition hover:shadow-md w-full h-64 p-6"
-    onClick={() => router.push(`/groups/${group.id}`)}
+      className="cursor-pointer transition hover:shadow-md w-full h-64 p-6"
+      onClick={() => router.push(`/groups/${group.id}`)}
     >
-
       <CardHeader>
         <CardTitle>{group.name}</CardTitle>
         <div className="mt-2 flex items-center -space-x-2">
           {avatars.map((member, idx) => (
             <Image
               key={idx}
-              src={member.avatar}
+              src={member.image || "/tripmate-logo.png"} //using logo as default avatar if link is null
               alt={member.name}
               width={32}
               height={32}
@@ -40,5 +50,5 @@ export function GroupCard({
         </div>
       </CardHeader>
     </Card>
-  )
+  );
 }

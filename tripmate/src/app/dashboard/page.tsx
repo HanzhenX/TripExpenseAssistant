@@ -8,22 +8,21 @@ export default async function Page() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
-
-/*
+  /*
 Currently depreciated, api fetch authentication requires cookie.
 */
 
-// const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/me/groups`, {
-//   cache: "no-store",
-// });
+  // const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/me/groups`, {
+  //   cache: "no-store",
+  // });
 
-// if (!res.ok) {
-//   const errorText = await res.text();
-//   console.error("Failed to fetch user groups:", res.status, errorText);
-//   throw new Error(`Failed to fetch user groups: ${res.status}`);
-// }
+  // if (!res.ok) {
+  //   const errorText = await res.text();
+  //   console.error("Failed to fetch user groups:", res.status, errorText);
+  //   throw new Error(`Failed to fetch user groups: ${res.status}`);
+  // }
 
-// const groups = await res.json();
+  // const groups = await res.json();
 
   const groups = await prisma.userGroup.findMany({
     where: {
@@ -34,8 +33,22 @@ Currently depreciated, api fetch authentication requires cookie.
         },
       },
     },
-    include: { group: true },
+    include: {
+      group: {
+        include: {
+          members: {
+            include: {
+              user: true,
+            },
+          },
+        },
+      },
+    },
     orderBy: [{ group: { state: "asc" } }, { group: { createdAt: "desc" } }],
+  });
+  console.log("Sending groups to client:", groups);
+  groups.forEach((g) => {
+    console.log(`Members of group ${g.group.name}:`, g.group.members);
   });
 
   return (

@@ -1,34 +1,34 @@
-"use client"
+"use client";
 
-import { useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 // import your action: e.g. createGroup
-// import { createGroup } from "@/lib/actions"
+import { createGroupAction } from "./actions";
 
-export default function CreateGroup() {
-  const [message, setMessage] = useState<string | null>(null)
-  const [isPending, startTransition] = useTransition()
-  const router = useRouter()
+export default function Page() {
+  const [message, setMessage] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleAction = async (formData: FormData) => {
     startTransition(async () => {
       try {
-        // Replace this with your real action
-        // const result = await createGroup(formData)
-        const result = { success: true }
+        const groupName = formData.get("name") as string;
 
-        if (result?.error) {
-          setMessage(result.error)
-        } else {
-          setMessage("Group created successfully!")
-          setTimeout(() => router.push("/dashboard"), 2000)
-        }
+        const group = await createGroupAction(groupName);
+
+        setMessage("Group created successfully!");
+        setTimeout(() => router.push("/dashboard"), 2000);
       } catch (err) {
-        setMessage("Something went wrong.")
+        if (err instanceof Error) {
+          setMessage(err.message);
+        } else {
+          setMessage("An unknown error occurred.");
+        }
       }
-    })
-  }
+    });
+  };
 
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
@@ -51,10 +51,8 @@ export default function CreateGroup() {
           {isPending ? "Creating..." : "Create Group"}
         </Button>
 
-        {message && (
-          <p className="text-sm text-blue-600 mt-2">{message}</p>
-        )}
+        {message && <p className="text-sm text-blue-600 mt-2">{message}</p>}
       </form>
     </div>
-  )
+  );
 }

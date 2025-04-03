@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
-export async function createGroupValidated(userId: string, name: string) {
+export async function createGroup(userId: string, name: string) {
   if (!name || name.length < 3) {
     throw new Error("Group name is too short");
   }
@@ -72,4 +72,3 @@ export async function addUserToGroupByEmail({
     },
   });
 }
-
