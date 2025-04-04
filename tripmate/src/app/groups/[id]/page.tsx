@@ -1,23 +1,85 @@
-// app/groups/[id]/page.tsx
-import { GroupSidebar } from "@/components/group-sidebar"
-import { GroupExpensePanel } from "@/components/group-expense-panel"
+import { GroupSidebar } from "@/components/group-sidebar";
+import { GroupExpensePanel } from "@/components/group-expense-panel";
+import { createTransaction } from "@/lib/db/transactions";
+import { getCurrentUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import prisma from "@/lib/prisma";
 
-export default async function GroupPage({ params }: { params: { id: string } }) {
-  const groupId = params.id
- /* need to replace  with something like 
- const group = await prisma.group.findUnique({
-  where: { id: parseInt(params.id) },
-  include: { members: true, expenses: true },
-})*/
+export default async function GroupPage({
+  params,
+  expenses,
+}: {
+  params: { id: string };
+  expenses: {
+    id: string;
+    description: string;
+    amount: number;
+    paidBy: string;
+    timestamp: string;
+  }[];
+}) {
+  const groupId = params.id;
+
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
+
+  const group = await prisma.group.findUnique({
+    where: { id: groupId },
+    select: {
+      id: true,
+      name: true,
+      members: {
+        select: {
+          user: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const fetchedExpenses = await prisma.transaction.findMany({
+    where: { groupId },
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      id: true,
+      description: true,
+      amount: true,
+      createdAt: true,
+      paidBy: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+
+  if (!group) {
+    return <div>Group not found</div>;
+  }
+
   return (
     <div className="flex h-screen">
       {/* Left Panel: Group Members */}
-      <GroupSidebar groupId={groupId} />
+      <GroupSidebar group={group} />
 
       {/* Right Panel: Expenses & Controls */}
       <div className="flex-1 p-6 space-y-4 overflow-y-auto">
-        <GroupExpensePanel groupId={groupId} />
+        <GroupExpensePanel
+          expenses={fetchedExpenses.map((e) => ({
+            id: e.id,
+            description: e.description ?? "",
+            amount: e.amount,
+            paidBy: e.paidBy.name,
+            timestamp: e.createdAt.toISOString(),
+          }))}
+        />
       </div>
     </div>
-  )
+  );
 }

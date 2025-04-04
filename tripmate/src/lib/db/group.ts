@@ -15,6 +15,18 @@ export async function createGroup(userId: string, name: string) {
   });
 }
 
+export async function getGroupById(groupId: string) {
+  return await prisma.group.findUnique({
+    where: { id: groupId },
+    include: {
+      members: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
+}
 /*
 Add User to a group
 Validates if the inviter is the admin of the group

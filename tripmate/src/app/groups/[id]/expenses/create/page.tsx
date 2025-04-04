@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, use } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,13 +16,13 @@ import {
 import { createExpenseAction } from "./actions";
 import { RequiredExtensionArgs } from "@prisma/client/runtime/library";
 import { useRequireSession } from "@/lib/hooks/use-require-session";
-import { Form } from "react-hook-form";
-
+import { useParams } from "next/navigation";
 const categories = ["Food", "Travel", "Lodging", "Miscellaneous"];
 
-export default function NewExpensePage({ params }: { params: { id: string } }) {
+export default function NewExpensePage() {
   const router = useRouter();
-  const { id: groupId } = params;
+  const params = useParams<{ id: string }>();
+  const groupId = params.id;
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState<string | null>(null);
   const [category, setCategory] = useState<string>("");
