@@ -7,6 +7,7 @@ export async function createTransaction(data: {
   groupId: string;
   amount: number;
   description?: string;
+  imageUrl?:    string;
 }) {
   const user = await getCurrentUser();
   if (!user) throw new Error("Unauthorized");
@@ -27,6 +28,7 @@ export async function createTransaction(data: {
       paidByUserId: user.id,
       amount: data.amount,
       description: data.description,
+      imageUrl: data.imageUrl,
     },
   });
   console.log("✅ Successfully created transaction: ", transaction);

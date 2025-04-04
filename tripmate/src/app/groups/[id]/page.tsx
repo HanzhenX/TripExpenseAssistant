@@ -13,6 +13,7 @@ export default async function GroupPage({
   expenses: {
     id: string;
     description: string;
+    imageurl?: string;
     amount: number;
     paidBy: string;
     timestamp: string;
@@ -49,6 +50,7 @@ export default async function GroupPage({
     select: {
       id: true,
       description: true,
+      imageUrl: true, 
       amount: true,
       createdAt: true,
       paidBy: {
@@ -75,6 +77,7 @@ export default async function GroupPage({
           expenses={fetchedExpenses.map((e) => ({
             id: e.id,
             description: e.description ?? "",
+            imageUrl: e.imageUrl ?? "",
             amount: e.amount,
             paidBy: e.paidBy.name,
             paidById: e.paidBy.id,

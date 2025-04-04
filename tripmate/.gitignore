@@ -21,3 +21,6 @@ package-lock.json
 prisma/migrations/
 
 src/app/upload-test/
+
+# npm install @aws-sdk/client-s3
+# npm install @aws-sdk/s3-request-presigner

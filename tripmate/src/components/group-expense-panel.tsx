@@ -30,6 +30,7 @@ export function GroupExpensePanel({
   expenses: {
     id: string;
     description: string;
+    imageUrl: string;
     amount: number;
     paidBy: string;
     paidById: string;
@@ -123,6 +124,19 @@ export function GroupExpensePanel({
                   {new Date(exp.timestamp).toLocaleString(undefined, {
                     timeZone: tz ?? "UTC",
                   })}
+                  {exp.imageUrl && (
+                    <>
+                      {" · "}
+                      <a
+                        href={exp.imageUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline text-blue-500 hover:text-blue-700 ml-1"
+                      >
+                        View Image
+                      </a>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="flex gap-2">
