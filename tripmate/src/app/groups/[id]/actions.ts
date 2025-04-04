@@ -25,3 +25,22 @@ export async function deleteTransactionAction(transactionId: string) {
 
   return { success: true };
 }
+
+import { addUserToGroupByEmail } from "@/lib/db/group";
+
+export async function addMemberAction({
+  groupId,
+  inviteeEmail,
+}: {
+  groupId: string;
+  inviteeEmail: string;
+}) {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Unauthorized");
+
+  return await addUserToGroupByEmail({
+    inviterId: user.id,
+    groupId,
+    inviteeEmail,
+  });
+}

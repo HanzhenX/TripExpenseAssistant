@@ -6,8 +6,20 @@ import { PlusIcon, PencilIcon, TrashIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { deleteTransactionAction } from "@/app/groups/[id]/actions";
+import {
+  deleteTransactionAction,
+  addMemberAction,
+} from "@/app/groups/[id]/actions";
 import { useTransition } from "react";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 export function GroupExpensePanel({
   expenses,
@@ -27,6 +39,9 @@ export function GroupExpensePanel({
   const [tz, setTz] = useState<string | null>(null);
   const params = useParams<{ id: string }>();
   const groupId = params.id;
+
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     if (typeof Intl !== "undefined") {
@@ -108,10 +123,40 @@ export function GroupExpensePanel({
       {/* Group Controls */}
       <div className="mt-6 flex flex-col gap-4">
         {/* <Button variant="default">Submit New Expense</Button> */}
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button variant="default">Add Member</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Invite by Email</DialogTitle>
+            </DialogHeader>
+            <Input
+              placeholder="example@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <DialogFooter>
+              <Button
+                onClick={async () => {
+                  try {
+                    await addMemberAction({ groupId, inviteeEmail: email });
+                    setOpen(false);
+                    router.refresh();
+                  } catch (err: any) {
+                    alert(err.message ?? "Failed to invite user");
+                  }
+                }}
+              >
+                Confirm
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
         <Button variant="default">Settle Group</Button>
-        <div className="text-sm">
+        {/* <div className="text-sm">
           Invitation Code: <Badge variant="secondary">ABC123</Badge>
-        </div>
+        </div> */}
       </div>
     </>
   );
