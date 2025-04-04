@@ -54,6 +54,7 @@ export default async function GroupPage({
       paidBy: {
         select: {
           name: true,
+          id: true,
         },
       },
     },
@@ -76,6 +77,7 @@ export default async function GroupPage({
             description: e.description ?? "",
             amount: e.amount,
             paidBy: e.paidBy.name,
+            paidById: e.paidBy.id,
             timestamp: e.createdAt.toISOString(),
           }))}
         />

@@ -56,3 +56,27 @@ export async function addMemberAction({
     inviteeEmail,
   });
 }
+
+export async function getNameIdMapInGroupByGroupId(groupId: string) {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Unauthorized");
+
+  const group = await prisma.group.findUnique({
+    where: { id: groupId },
+    include: {
+      members: {
+        select: {
+          userId: true,
+          user: { select: { name: true } },
+        },
+      },
+    },
+  });
+
+  if (!group) throw new Error("Group not found");
+
+  return group.members.map((member) => ({
+    id: member.userId,
+    name: member.user.name,
+  }));
+}

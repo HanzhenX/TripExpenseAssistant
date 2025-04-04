@@ -10,6 +10,7 @@ import {
   deleteTransactionAction,
   addMemberAction,
   settleGroupAction,
+  getNameIdMapInGroupByGroupId,
 } from "@/app/groups/[id]/actions";
 import { useTransition } from "react";
 import {
@@ -31,6 +32,7 @@ export function GroupExpensePanel({
     description: string;
     amount: number;
     paidBy: string;
+    paidById: string;
     timestamp: string;
   }[];
 }) {
@@ -47,6 +49,7 @@ export function GroupExpensePanel({
 
   const [settleOpen, setSettleOpen] = useState(false);
   const [settlements, setSettlements] = useState<Settlement[]>([]);
+  const [settlementsInName, setSettlementsInName] = useState<Settlement[]>([]);
   const [total, setTotal] = useState(0);
   const [mean, setMean] = useState(0);
 
@@ -59,18 +62,34 @@ export function GroupExpensePanel({
   useEffect(() => {
     if (settleOpen) {
       const transactions = expenses.map((e) => ({
-        paidByUserId: e.paidBy,
+        paidByUserId: e.paidById,
         amount: e.amount,
       }));
 
-      const members = Array.from(
-        new Set(transactions.map((t) => t.paidByUserId))
-      );
-
-      const result = calculateGroupSettlement(transactions, members);
-      setSettlements(result.settlements);
-      setTotal(result.total);
-      setMean(result.mean);
+      (async () => {
+        try {
+          const membersMap = await getNameIdMapInGroupByGroupId(groupId);
+          const result = calculateGroupSettlement(
+            expenses.map((e) => ({
+              paidByUserId: e.paidById,
+              amount: e.amount,
+            })),
+            membersMap.map((m) => m.id)
+          );
+          setSettlements(result.settlements);
+          setTotal(result.total);
+          setMean(result.mean);
+          const nameMap = new Map(membersMap.map((m) => [m.id, m.name]));
+          const withNames = result.settlements.map((s) => ({
+            from: nameMap.get(s.from) || s.from,
+            to: nameMap.get(s.to) || s.to,
+            amount: s.amount,
+          }));
+          setSettlementsInName(withNames);
+        } catch (err) {
+          console.error("Failed to fetch members for settlement", err);
+        }
+      })();
     }
   }, [settleOpen]);
 
@@ -187,12 +206,12 @@ export function GroupExpensePanel({
               <DialogTitle>Settle Group</DialogTitle>
             </DialogHeader>
             <div className="space-y-2 max-h-60 overflow-y-auto">
-              {settlements.length === 0 ? (
+              {settlementsInName.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
                   No debts to settle.
                 </p>
               ) : (
-                settlements.map((s, i) => (
+                settlementsInName.map((s, i) => (
                   <Badge key={i} variant="secondary">
                     {s.from} owes {s.to} ${s.amount.toFixed(2)}
                   </Badge>

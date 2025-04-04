@@ -8,17 +8,16 @@ interface Transaction {
 }
 
 export interface MemberBalance {
-    userId: string;
-    balance: number; // positive = owed, negative = owes
-  }
-  
-  export interface Settlement {
-    from: string;
-    to: string;
-    amount: number;
-  }
+  userId: string;
+  balance: number; // positive = owed, negative = owes
+}
 
-  
+export interface Settlement {
+  from: string;
+  to: string;
+  amount: number;
+}
+
 /*
 This function accept a list of transactions and a list of members,
 then convert them in to a list of MemberBlances
@@ -31,7 +30,6 @@ export function prepareSettlement(
   total: number;
   mean: number;
   balances: MemberBalance[];
-  settlements: Settlement[];
 } {
   const total = transactions.reduce((sum, t) => sum + t.amount, 0);
   const mean = total / members.length;
@@ -46,9 +44,7 @@ export function prepareSettlement(
     balance: (paidMap.get(userId) ?? 0) - mean,
   }));
 
-  const settlements = settleDebts(balances);
-
-  return { total, mean, balances, settlements };
+  return { total, mean, balances };
 }
 
 /*
@@ -58,6 +54,7 @@ and return a list of settlements.
 */
 
 export function settleDebts(balances: MemberBalance[]): Settlement[] {
+  console.log("Trying to run algorithm on the balances: ", balances);
   const settlements: Settlement[] = [];
 
   const creditors = [...balances]
@@ -103,15 +100,18 @@ and returns:
     list of settlements.
 */
 export function calculateGroupSettlement(
-    transactions: Transaction[],
-    members: string[]
-  ): {
-    total: number;
-    mean: number;
-    balances: MemberBalance[];
-    settlements: Settlement[];
-  } {
-    const { total, mean, balances } = prepareSettlement(transactions, members);
-    const settlements = settleDebts(balances);
-    return { total, mean, balances, settlements };
-  }
+  transactions: Transaction[],
+  members: string[]
+): {
+  total: number;
+  mean: number;
+  balances: MemberBalance[];
+  settlements: Settlement[];
+} {
+  console.log("Trying to settle the following transactions: ", transactions);
+  console.log("Among members: ", members);
+  const { total, mean, balances } = prepareSettlement(transactions, members);
+  const settlements = settleDebts(balances);
+  console.log("Calculated settlements ", settlements);
+  return { total, mean, balances, settlements };
+}
