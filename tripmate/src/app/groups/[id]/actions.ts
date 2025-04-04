@@ -26,6 +26,18 @@ export async function deleteTransactionAction(transactionId: string) {
   return { success: true };
 }
 
+export async function settleGroupAction(groupId: string) {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Unauthorized");
+
+  await prisma.group.update({
+    where: { id: groupId },
+    data: { state: "settled" },
+  });
+
+  return { success: true };
+}
+
 import { addUserToGroupByEmail } from "@/lib/db/group";
 
 export async function addMemberAction({

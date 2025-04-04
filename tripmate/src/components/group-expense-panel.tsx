@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import {
   deleteTransactionAction,
   addMemberAction,
+  settleGroupAction,
 } from "@/app/groups/[id]/actions";
 import { useTransition } from "react";
 import {
@@ -20,6 +21,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { calculateGroupSettlement, Settlement } from "@/lib/logic/settle";
 
 export function GroupExpensePanel({
   expenses,
@@ -43,11 +45,34 @@ export function GroupExpensePanel({
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
 
+  const [settleOpen, setSettleOpen] = useState(false);
+  const [settlements, setSettlements] = useState<Settlement[]>([]);
+  const [total, setTotal] = useState(0);
+  const [mean, setMean] = useState(0);
+
   useEffect(() => {
     if (typeof Intl !== "undefined") {
       setTz(Intl.DateTimeFormat().resolvedOptions().timeZone);
     }
   }, []);
+
+  useEffect(() => {
+    if (settleOpen) {
+      const transactions = expenses.map((e) => ({
+        paidByUserId: e.paidBy,
+        amount: e.amount,
+      }));
+
+      const members = Array.from(
+        new Set(transactions.map((t) => t.paidByUserId))
+      );
+
+      const result = calculateGroupSettlement(transactions, members);
+      setSettlements(result.settlements);
+      setTotal(result.total);
+      setMean(result.mean);
+    }
+  }, [settleOpen]);
 
   return (
     <>
@@ -153,10 +178,45 @@ export function GroupExpensePanel({
             </DialogFooter>
           </DialogContent>
         </Dialog>
-        <Button variant="default">Settle Group</Button>
-        {/* <div className="text-sm">
-          Invitation Code: <Badge variant="secondary">ABC123</Badge>
-        </div> */}
+        <Dialog open={settleOpen} onOpenChange={setSettleOpen}>
+          <DialogTrigger asChild>
+            <Button variant="default">Settle Group</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Settle Group</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-2 max-h-60 overflow-y-auto">
+              {settlements.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  No debts to settle.
+                </p>
+              ) : (
+                settlements.map((s, i) => (
+                  <Badge key={i} variant="secondary">
+                    {s.from} owes {s.to} ${s.amount.toFixed(2)}
+                  </Badge>
+                ))
+              )}
+            </div>
+            <DialogFooter>
+              <Button
+                onClick={async () => {
+                  try {
+                    await settleGroupAction(groupId);
+                    setSettleOpen(false);
+                    router.refresh();
+                  } catch (err: any) {
+                    alert(err.message ?? "Failed to settle group.");
+                  }
+                }}
+                disabled={settlements.length === 0}
+              >
+                Confirm Settle
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   );
