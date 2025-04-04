@@ -4,6 +4,7 @@ node_modules/
 
 # Environment variables
 .env
+.env.local
 
 # Build output
 .next/
@@ -14,3 +15,9 @@ node_modules/
 # Optional: lock files in parent dir if you only want to track the ones in your project folder
 ../package-lock.json
 ../package.json
+
+package-lock.json
+
+prisma/migrations/
+
+src/app/upload-test/

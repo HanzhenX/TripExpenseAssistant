@@ -11,8 +11,15 @@ export async function createExpenseAction(formData: FormData) {
   const descriptionInput = formData.get("description") as string;
   const category = formData.get("category") as string;
   const amount = parseFloat(formData.get("amount") as string);
+  const receiptKey = formData.get("receiptKey")?.toString();
 
   const combinedDescription = `${descriptionInput} Category: ${category}`;
+
+  // console.log("Group ID:", groupId);
+  // console.log("Description:", descriptionInput);
+  // console.log("Category:", category);
+  // console.log("Amount:", amount);
+  // console.log("Receipt Key:", receiptKey);
 
   return await createTransaction({
     groupId,

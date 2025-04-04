@@ -47,6 +47,29 @@ export default function NewExpensePage() {
 
     startTransition(async () => {
       try {
+        let receiptKey: string | null = null;
+
+        if (receipt) {
+            // Upload to /api/upload
+            const uploadRes = await fetch("/api/upload", {
+            method: "POST",
+            body: (() => {
+                const f = new FormData();
+                f.append("file", receipt);
+                return f;
+            })(),
+            });
+
+            const uploadData = await uploadRes.json();
+            if (!uploadRes.ok) throw new Error(uploadData.error || "Upload failed");
+            receiptKey = uploadData.url 
+        }
+
+        if (receiptKey) {
+            formData.set("receiptKey", receiptKey);
+            // console.log(receiptKey)
+        }
+
         await createExpenseAction(formData);
         setMessage("Expense successfully added!");
         setTimeout(() => {
