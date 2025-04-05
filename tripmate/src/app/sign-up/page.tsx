@@ -21,7 +21,13 @@ const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
   name: z.string().min(1),
-  image: z.string().url().optional(),
+  image: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || /^https?:\/\/.+/.test(val),
+      { message: "Must be a valid URL or left empty" }
+    ),
 });
 
 export default function SignUp() {
@@ -41,11 +47,17 @@ export default function SignUp() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
     setErrorMessage("");
+  // Assign a random avatar if the image is not provided
+  const randomSeed = `${values.name}-${Math.random().toString(36).substring(2, 8)}`;
+  const image =
+    values.image?.trim() ||
+    `https://api.dicebear.com/7.x/lorelei/png?seed=${encodeURIComponent(randomSeed)}`;
 
     try {
       const { data, error } = await authClient.signUp.email(
         {
           ...values,
+          image,
           callbackURL: "/dashboard",
         },
         {
