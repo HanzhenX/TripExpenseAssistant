@@ -121,7 +121,7 @@ export default function NewExpensePage() {
           Submit
         </Button>
 
-        {message && <p className="text-sm text-red-500 mt-2">{message}</p>}
+        {message && <p className="text-sm text-green-500 mt-2">{message}</p>}
       </form>
     </div>
   );

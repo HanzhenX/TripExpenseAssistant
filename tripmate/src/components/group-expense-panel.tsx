@@ -250,6 +250,12 @@ export function GroupExpensePanel({
             </DialogFooter>
           </DialogContent>
         </Dialog>
+        <Button
+          variant="secondary"
+          onClick={() => router.push("/dashboard")}
+        >
+          ← Back to Dashboard
+        </Button>
       </div>
     </>
   );
