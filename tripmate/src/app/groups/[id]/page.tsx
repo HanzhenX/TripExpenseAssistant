@@ -5,11 +5,16 @@ import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 
+type PostParams = {
+  params: Promise<{ id: string }>; // 'params' is a Promise that resolves to an object with 'id'
+};
+
+
 export default async function GroupPage({
   params,
   expenses,
 }: {
-  params: { id: string };
+  params: PostParams;
   expenses: {
     id: string;
     description: string;
@@ -19,8 +24,8 @@ export default async function GroupPage({
     timestamp: string;
   }[];
 }) {
-  const groupId = params.id;
-
+  const resolvedParams = await params;
+  const groupId: string = resolvedParams.id;
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
