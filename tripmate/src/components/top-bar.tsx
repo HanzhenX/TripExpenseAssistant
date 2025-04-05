@@ -2,7 +2,20 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-export function TopBar() {
+interface TopBarProps {
+  user: {
+    name: string
+    image?: string
+  }
+}
+
+export function TopBar({ user }: TopBarProps) {
+  const initials = user.name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase()
+    
   return (
     <div className="flex items-center justify-between p-4 border-b bg-background">
       {/* Left: Logo + Company Name */}
@@ -16,8 +29,8 @@ export function TopBar() {
 
       {/* Right: User Avatar (mocked for now) */}
       <Avatar className="h-10 w-10">
-      <AvatarImage src="https://api.dicebear.com/7.x/lorelei/png?seed=tripmate-user" />
-        <AvatarFallback>TS</AvatarFallback>
+        {user.image && <AvatarImage src={user.image} alt={user.name} />}
+        <AvatarFallback>{initials}</AvatarFallback>
       </Avatar>
     </div>
   )
