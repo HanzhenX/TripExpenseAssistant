@@ -10,6 +10,7 @@ export function GroupCard({
   group: {
     id: string;
     name: string;
+    state: string;
     members: {
       user: {
         name: string;
@@ -30,7 +31,10 @@ export function GroupCard({
       onClick={() => router.push(`/groups/${group.id}`)}
     >
       <CardHeader>
-        <CardTitle>{group.name}</CardTitle>
+        <CardTitle className={group.state === "settled" ? "text-muted-foreground" : ""}>
+          {group.name}
+          {group.state === "settled" && " (Settled)"}
+        </CardTitle>
         <div className="mt-2 flex items-center -space-x-2">
           {avatars.map((member, idx) => (
             <Image

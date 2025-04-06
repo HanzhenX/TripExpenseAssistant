@@ -7,7 +7,7 @@ import prisma from "@/lib/prisma";
 export default async function Page() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
-  console.log(user)
+  console.log(user);
   /*
 Currently depreciated, api fetch authentication requires cookie.
 */
@@ -53,7 +53,7 @@ Currently depreciated, api fetch authentication requires cookie.
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <TopBar user={user}/>
+      <TopBar user={user} />
       <main className="flex flex-1 flex-col p-4">
         <ClientGroupGrid groups={groups} />
       </main>

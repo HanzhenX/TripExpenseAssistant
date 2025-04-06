@@ -27,6 +27,7 @@ import { calculateGroupSettlement, Settlement } from "@/lib/logic/settle";
 export function GroupExpensePanel({
   expenses,
   userRole,
+  group,
 }: {
   expenses: {
     id: string;
@@ -38,6 +39,17 @@ export function GroupExpensePanel({
     timestamp: string;
   }[];
   userRole: string;
+  group: {
+    id: string;
+    name: string;
+    state: "active" | "settled" | "hidden";
+    members: {
+      user: {
+        name: string;
+        image: string | null;
+      };
+    }[];
+  };
 }) {
   console.log("Props received by GroupExpensePanel:", { userRole });
 
@@ -113,6 +125,8 @@ export function GroupExpensePanel({
           variant="outline"
           size="sm"
           onClick={() => router.push(`/groups/${groupId}/expenses/create`)}
+          disabled={group.state === "settled"}
+          title={group.state === "settled" ? "Group is settled" : ""}
         >
           <PlusIcon className="w-4 h-4 mr-1" />
           Add Expense
@@ -189,7 +203,13 @@ export function GroupExpensePanel({
         {/* <Button variant="default">Submit New Expense</Button> */}
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button variant="default">Add Member</Button>
+            <Button
+              variant="default"
+              disabled={group.state === "settled"}
+              title={group.state === "settled" ? "Group is settled" : ""}
+            >
+              Add Member
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -224,8 +244,14 @@ export function GroupExpensePanel({
           <DialogTrigger asChild>
             <Button
               variant="default"
-              disabled={!isAdmin}
-              title={!isAdmin ? "Only admins can settle the group" : ""}
+              disabled={!isAdmin || group.state === "settled"}
+              title={
+                !isAdmin
+                  ? "Only admins can settle the group"
+                  : group.state === "settled"
+                  ? "Group is already settled"
+                  : ""
+              }
             >
               Settle Group
             </Button>
@@ -265,12 +291,16 @@ export function GroupExpensePanel({
             </DialogFooter>
           </DialogContent>
         </Dialog>
-        <Button
-          variant="secondary"
-          onClick={() => router.push("/dashboard")}
-        >
+        <Button variant="secondary" onClick={() => router.push("/dashboard")}>
           ← Back to Dashboard
         </Button>
+        {group.state === "settled" && (
+          <p className="text-center italic text-muted-foreground mt-2">
+            ✨ This group has been settled, so no further changes can be made.<br />
+            Thank you for using TripMate — we hope it helped create wonderful memories.<br />
+            To start a new adventure, feel free to create a new group!
+          </p>
+        )}
       </div>
     </>
   );

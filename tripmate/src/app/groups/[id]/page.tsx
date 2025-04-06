@@ -5,16 +5,11 @@ import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 
-type PostParams = {
-  params: Promise<{ id: string }>; // 'params' is a Promise that resolves to an object with 'id'
-};
-
-
 export default async function GroupPage({
   params,
   expenses,
 }: {
-  params: PostParams;
+  params: { id: string };
   expenses: {
     id: string;
     description: string;
@@ -34,6 +29,7 @@ export default async function GroupPage({
     select: {
       id: true,
       name: true,
+      state: true,
       members: {
         select: {
           user: {
@@ -57,7 +53,7 @@ export default async function GroupPage({
       role: true,
     },
   });
-  
+
   const fetchedExpenses = await prisma.transaction.findMany({
     where: { groupId },
     orderBy: {
@@ -66,7 +62,7 @@ export default async function GroupPage({
     select: {
       id: true,
       description: true,
-      imageUrl: true, 
+      imageUrl: true,
       amount: true,
       createdAt: true,
       paidBy: {
@@ -100,6 +96,7 @@ export default async function GroupPage({
             timestamp: e.createdAt.toISOString(),
           }))}
           userRole={userGroup?.role ?? "member"}
+          group={group}
         />
       </div>
     </div>

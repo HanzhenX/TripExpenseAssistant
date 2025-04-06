@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface TopBarProps {
   user: {
-    name: string
-    image?: string
-  }
+    name: string;
+    image?: string | null | undefined;
+  };
 }
 
 export function TopBar({ user }: TopBarProps) {
@@ -14,8 +14,8 @@ export function TopBar({ user }: TopBarProps) {
     .split(" ")
     .map((part) => part[0])
     .join("")
-    .toUpperCase()
-    
+    .toUpperCase();
+
   return (
     <div className="flex items-center justify-between p-4 border-b bg-background">
       {/* Left: Logo + Company Name */}
@@ -33,5 +33,5 @@ export function TopBar({ user }: TopBarProps) {
         <AvatarFallback>{initials}</AvatarFallback>
       </Avatar>
     </div>
-  )
+  );
 }
