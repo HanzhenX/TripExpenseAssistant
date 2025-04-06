@@ -46,6 +46,7 @@ export function LoginForm({
         <Button
           variant="outline"
           className="w-full"
+          type="button" 
           onClick={() =>
             authClient.signIn.social({
               provider: "github",
