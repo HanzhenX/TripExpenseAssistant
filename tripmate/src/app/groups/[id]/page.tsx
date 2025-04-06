@@ -46,7 +46,18 @@ export default async function GroupPage({
       },
     },
   });
-
+  const userGroup = await prisma.userGroup.findUnique({
+    where: {
+      userId_groupId: {
+        userId: user.id,
+        groupId,
+      },
+    },
+    select: {
+      role: true,
+    },
+  });
+  
   const fetchedExpenses = await prisma.transaction.findMany({
     where: { groupId },
     orderBy: {
@@ -88,6 +99,7 @@ export default async function GroupPage({
             paidById: e.paidBy.id,
             timestamp: e.createdAt.toISOString(),
           }))}
+          userRole={userGroup?.role ?? "member"}
         />
       </div>
     </div>

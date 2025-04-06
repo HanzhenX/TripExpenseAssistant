@@ -26,6 +26,7 @@ import { calculateGroupSettlement, Settlement } from "@/lib/logic/settle";
 
 export function GroupExpensePanel({
   expenses,
+  userRole,
 }: {
   expenses: {
     id: string;
@@ -36,7 +37,12 @@ export function GroupExpensePanel({
     paidById: string;
     timestamp: string;
   }[];
+  userRole: string;
 }) {
+  console.log("Props received by GroupExpensePanel:", { userRole });
+
+  const isAdmin = userRole === "admin";
+
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -212,8 +218,17 @@ export function GroupExpensePanel({
           </DialogContent>
         </Dialog>
         <Dialog open={settleOpen} onOpenChange={setSettleOpen}>
-          <DialogTrigger asChild>
+          {/* <DialogTrigger asChild>
             <Button variant="default">Settle Group</Button>
+          </DialogTrigger> */}
+          <DialogTrigger asChild>
+            <Button
+              variant="default"
+              disabled={!isAdmin}
+              title={!isAdmin ? "Only admins can settle the group" : ""}
+            >
+              Settle Group
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
