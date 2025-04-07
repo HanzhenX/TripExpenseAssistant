@@ -242,6 +242,7 @@ This section describes how to set up the development environment, configure the 
 1. Clone the repository and navigate to the project directory.
 
 ```bash
+git clone https://github.com/HanzhenX/TripExpenseAssistant/settings
 cd tripmate
 ```
 
