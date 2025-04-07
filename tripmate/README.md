@@ -155,7 +155,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ---
 
-### 🔐 Sign In
+### Sign In
 
 - Users sign in using email and password or **GitHub OAuth** via the login page.
 - Upon signing in, users are redirected to their **Dashboard**.
@@ -164,7 +164,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ---
 
-### 🏠 Dashboard
+### Dashboard
 
 - The dashboard displays:
   - Current User avatar on the top right corner
@@ -177,7 +177,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ---
 
-### 👥 Group Page
+### Group Page
 
 - Clicking a group redirects to the **Group Details Page**.
 - Left panel: List of group members
