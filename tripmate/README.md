@@ -6,10 +6,10 @@
 
 | Name            | Student Number | Preferred Email Address     |
 |-----------------|----------------|------------------------------|
-| [Hanzhen Xu]          | [1004475285]    | [hanzhen.xu@mail.utoronto.ca]         |
-| [Long Zhuang]          | [1005487938]    | [angela.zhuang@mail.utoronto.ca]         |
+| Hanzhen Xu          | 1004475285    | hanzhen.xu@mail.utoronto.ca         |
+| Long Zhuang           | 1005487938    | angela.zhuang@mail.utoronto.ca         |
 
----
+
 
 ## Motivation
 
@@ -305,7 +305,7 @@ AWS_BUCKET=my-receipt-storage
 
 ## Team Contribution 
 
-### **HanZhen Xu: Backend & Authentication**
+### **Hanzhen Xu: Backend & Authentication**
 - Set up the **PostgreSQL database schema** using Prisma ORM.
 - Implemented **user authentication** using BetterAuth with GitHub OAuth.
 - Handled backend **database operations** and **session validation**.
@@ -321,6 +321,9 @@ AWS_BUCKET=my-receipt-storage
 - Reviewing each other’s code to ensure best practices.
 
 ## Lessons Learned and Concluding Remark
+This Project helped us strengthen our understanding of full-stack web development using Next.js, PostgreSQL, and cloud services like AWS S3. We gained hands-on experience with authentication flows, database schema design, file uploads, and team-based collaboration using Git.
+
+Throughout development, we encountered and overcame async data handling, and UI/UX improvements. These experiences deepened our appreciation for clean architecture, modular design, and testing practices.
 
 
 ## Learn More
