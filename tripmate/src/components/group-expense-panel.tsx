@@ -62,6 +62,8 @@ export function GroupExpensePanel({
   const [tz, setTz] = useState<string | null>(null);
   const params = useParams<{ id: string }>();
   const groupId = params.id;
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => { setIsClient(true); }, []);
 
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -141,9 +143,10 @@ export function GroupExpensePanel({
                 <CardTitle>{exp.description}</CardTitle>
                 <div className="text-sm text-muted-foreground">
                   Paid by {exp.paidBy} ·{" "}
-                  {new Date(exp.timestamp).toLocaleString(undefined, {
-                    timeZone: tz ?? "UTC",
-                  })}
+                  {isClient &&
+                    new Date(exp.timestamp).toLocaleString(undefined, {
+                      timeZone: tz ?? "UTC",
+                    })}
                   {exp.imageUrl && (
                     <>
                       {" · "}
@@ -296,8 +299,11 @@ export function GroupExpensePanel({
         </Button>
         {group.state === "settled" && (
           <p className="text-center italic text-muted-foreground mt-2">
-            ✨ This group has been settled, so no further changes can be made.<br />
-            Thank you for using TripMate — we hope it helped create wonderful memories.<br />
+            ✨ This group has been settled, so no further changes can be made.
+            <br />
+            Thank you for using TripMate — we hope it helped create wonderful
+            memories.
+            <br />
             To start a new adventure, feel free to create a new group!
           </p>
         )}

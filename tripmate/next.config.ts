@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "avatars.githubusercontent.com",
       },
+      {
+        protocol: "https",
+        hostname: "tripmatebucket1213.s3.amazonaws.com",
+      },
     ],
   },
   experimental: {
