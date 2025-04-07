@@ -11,6 +11,7 @@ node_modules/
 
 # OS or IDE stuff (just in case)
 .DS_Store
+../.DS_Store
 
 # Optional: lock files in parent dir if you only want to track the ones in your project folder
 ../package-lock.json
