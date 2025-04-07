@@ -24,10 +24,9 @@ const formSchema = z.object({
   image: z
     .string()
     .optional()
-    .refine(
-      (val) => !val || /^https?:\/\/.+/.test(val),
-      { message: "Must be a valid URL or left empty" }
-    ),
+    .refine((val) => !val || /^https?:\/\/.+/.test(val), {
+      message: "Must be a valid URL or left empty",
+    }),
 });
 
 export default function SignUp() {
@@ -43,15 +42,35 @@ export default function SignUp() {
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
     setErrorMessage("");
-  // Assign a random avatar if the image is not provided
-  const randomSeed = `${values.name}-${Math.random().toString(36).substring(2, 8)}`;
-  const image =
-    values.image?.trim() ||
-    `https://api.dicebear.com/7.x/lorelei/png?seed=${encodeURIComponent(randomSeed)}`;
+
+    let uploadedAvatarUrl: string | null = null;
+
+    if (avatarFile) {
+      const uploadForm = new FormData();
+      uploadForm.append("file", avatarFile);
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: uploadForm,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Avatar upload failed");
+      uploadedAvatarUrl = data.url;
+    }
+
+    // Assign a random avatar if the image is not provided
+    const randomSeed = `${values.name}-${Math.random()
+      .toString(36)
+      .substring(2, 8)}`;
+    const image =
+      uploadedAvatarUrl ||
+      `https://api.dicebear.com/7.x/lorelei/png?seed=${encodeURIComponent(
+        randomSeed
+      )}`;
 
     try {
       const { data, error } = await authClient.signUp.email(
@@ -127,19 +146,16 @@ export default function SignUp() {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Profile Image (optional)</FormLabel>
-                  <FormControl>
-                    <Input type="url" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div>
+              <FormLabel htmlFor="avatar">Upload Avatar (optional)</FormLabel>
+              <Input
+                id="avatar"
+                name="avatar"
+                type="file"
+                accept="image/*"
+                onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
+              />
+            </div>
 
             {errorMessage && (
               <p className="text-red-500 text-sm">{errorMessage}</p>
