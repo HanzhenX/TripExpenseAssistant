@@ -4,7 +4,7 @@
 
 ## Team Information
 
-| Name            | Student Number | Preferred Email Address     |
+| Name            | Student Number | Email Address     |
 |-----------------|----------------|------------------------------|
 | Hanzhen Xu          | 1004475285    | hanzhen.xu@mail.utoronto.ca         |
 | Long Zhuang           | 1005487938    | angela.zhuang@mail.utoronto.ca         |
@@ -17,13 +17,13 @@ Splitting expenses among friends, family, or colleagues while traveling can lead
 
 ---
 
-## 🎯 Objectives
+## Objectives
 
 Develop a **full-stack web application** using **Next.js** that enables users to **create trip groups, add expenses, track balances, and settle debts efficiently**, all while ensuring **data integrity, security, and collaboration**.
 
 ---
 
-## 🛠️ Technical Stack
+## Technical Stack
 
 - **Frontend**: Next.js 13+ with App Router, Tailwind CSS, and shadcn/ui.
 - **Backend**: Next.js API Routes for backend logic.
