@@ -1,6 +1,8 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { authClient } from "@/lib/auth-client";
+import { Button } from "@/components/ui/button";
 
 interface TopBarProps {
   user: {
@@ -28,10 +30,22 @@ export function TopBar({ user }: TopBarProps) {
       </div>
 
       {/* Right: User Avatar (mocked for now) */}
-      <Avatar className="h-10 w-10">
-        {user.image && <AvatarImage src={user.image} alt={user.name} />}
-        <AvatarFallback>{initials}</AvatarFallback>
-      </Avatar>
+      <div className="flex items-center gap-3">
+        <Avatar className="h-10 w-10">
+          {user.image && <AvatarImage src={user.image} alt={user.name} />}
+          <AvatarFallback>{initials}</AvatarFallback>
+        </Avatar>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={async () => {
+            await authClient.signOut();
+            window.location.href = "/";
+          }}
+        >
+          Sign out
+        </Button>
+      </div>
     </div>
   );
 }
