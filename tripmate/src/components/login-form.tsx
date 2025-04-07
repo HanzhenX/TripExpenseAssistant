@@ -35,7 +35,29 @@ export function LoginForm({
           </div>
           <Input id="password" type="password" required />
         </div>
-        <Button type="submit" className="w-full">
+        <Button
+          type="button"
+          className="w-full"
+          onClick={async () => {
+            const form = document.querySelector("form");
+            const email = (form?.querySelector("#email") as HTMLInputElement)
+              ?.value;
+            const password = (
+              form?.querySelector("#password") as HTMLInputElement
+            )?.value;
+
+            if (!email || !password) {
+              alert("Please enter both email and password.");
+              return;
+            }
+
+            await authClient.signIn.email({
+              email,
+              password,
+              callbackURL: "/dashboard",
+            });
+          }}
+        >
           Login
         </Button>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -46,7 +68,7 @@ export function LoginForm({
         <Button
           variant="outline"
           className="w-full"
-          type="button" 
+          type="button"
           onClick={() =>
             authClient.signIn.social({
               provider: "github",
