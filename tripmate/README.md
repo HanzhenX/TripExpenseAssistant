@@ -4,12 +4,10 @@
 
 ## Team Information
 
-| Name            | Student Number | Email Address     |
-|-----------------|----------------|------------------------------|
-| Hanzhen Xu          | 1004475285    | hanzhen.xu@mail.utoronto.ca         |
-| Long Zhuang           | 1005487938    | angela.zhuang@mail.utoronto.ca         |
-
-
+| Name        | Student Number | Email Address                  |
+| ----------- | -------------- | ------------------------------ |
+| Hanzhen Xu  | 1004475285     | hanzhen.xu@mail.utoronto.ca    |
+| Long Zhuang | 1005487938     | angela.zhuang@mail.utoronto.ca |
 
 ## Motivation
 
@@ -37,8 +35,8 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 
 ## 3. Core Features & Functionality
 
-
 ### A. User Authentication & Authorization
+
 - **GitHub OAuth** authentication implemented using **BetterAuth**.
 - Secure session handling with **server-side token validation**.
 - **Role-based access control** ensures that only group members can:
@@ -46,29 +44,36 @@ Develop a **full-stack web application** using **Next.js** that enables users to
   - Delete expenses
   - Settle group debts
 
-### B. Home Page (`/`)
-- Displays **user’s avatar** and a **list of groups** that the user is part of.
+### B. Dashboard (`/`)
+
+- Displays **user’s avatar** and a **pannel of group cards** that the user is part of.
 - **Buttons:**
   - `Create Group`: Allows users to create a new group with a trip name and description.
 - **Loading and error handling** for fetching user groups.
 
 ---
+
 ### C. Group Page (`/group/[id]`)
+
 #### **Left Panel**
+
 - Displays the **list of users** in the group.
 
 #### **Right Panel**
+
 - Displays the **list of expenses** added by users within the group.
 - Each expense should have:
   - `Delete` button to trigger deletion confirmation.
 
 #### **Each Expense Entry Shows:**
+
 - Who paid.
 - Total amount.
 - Timestamp (ordered by the time added).
-- Link to visit the image uploaded. 
+- Link to visit the image uploaded.
 
 #### **Submit New Expense Button**
+
 - Allows users to **submit a new expense** paid by them.
 - Opens **Expense Management** modal form.
 - **Default**: All group members split the expense equally.
@@ -78,17 +83,24 @@ Develop a **full-stack web application** using **Next.js** that enables users to
   ```
 
 #### **Settle Button (Group Creator Only)**
+
 - Computes and simplifies transactions to determine who owes whom.
 - Displays **minimal set of payments needed** to settle the group debts.
 
 #### **Group Invitation Button**
+
 - The group creator can invite others by entering their email address.
 
 #### **Group Invitation Button**
+
 - Click to navigate back to the dashboard.
+
 ---
+
 ### D. Expense Management (Modal)
+
 #### **Modal Form Fields**
+
 - **Expense Description** (Required, text input)
 - **Amount** (Required, decimal input)
 - **Category Selection** (Food, Travel, Lodging, Miscellaneous)
@@ -97,13 +109,16 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 ---
 
 #### **Form Fields**
+
 - **Expense Description** (Required, text input)
 - **Amount** (Required, decimal input, min=0.01)
 - **Category Selection** (Dropdown: Food, Travel, Lodging, Miscellaneous)
 - **Upload Receipt** (Optional, allows replacing existing receipt)
 
 ---
+
 ### F. Delete Functionality
+
 - Each expense should have a **`Delete Expense`** button.
 - Clicking the delete button triggers a **confirmation dialog**:
   "Are you sure you want to delete [expense description]?"
@@ -116,7 +131,9 @@ Develop a **full-stack web application** using **Next.js** that enables users to
   - Displays `Error deleting expense`.
 
 ---
+
 ### G. Settle Debts (`/group/[id]/settle`)
+
 - Only the **group creator** can click `Settle`.
 - Computes a **final settlement summary** and shows it in a modal, waiting for **group creator** to `Confirm`.
 
@@ -124,10 +141,12 @@ Develop a **full-stack web application** using **Next.js** that enables users to
 
 ## 4. Course Project Requirement Checklist
 
-### Core Technical Requirements 
+### Core Technical Requirements
+
 - ✅ **Frontend Requirements**
+
   - **React or Next.js for UI development** → Implementing with **Next.js**.
-  - **Tailwind CSS for styling** 
+  - **Tailwind CSS for styling**
   - **shadcn/ui** → Forms and modals from shadcn/ui are used.
   - **Responsive design implementation** → Short forms use modal to make the experience responsive.
 
@@ -136,13 +155,15 @@ Develop a **full-stack web application** using **Next.js** that enables users to
   - **Cloud storage for file handling** → Implementing **AWS S3** for uploading and storing receipts.
 
 ### Architecture Approach
+
 - ✅ ** Next.js Full-Stack**
-  - **Next.js 13+ with App Router** 
+  - **Next.js 13+ with App Router**
   - **Server Components for backend logic**
   - **API Routes for data handling**
   - **Server Actions for mutations**
 
 ### Advanced Features (Must Implement at Least Two)
+
 - ✅ **User authentication and authorization** → Implementing **Github OAuth authentication** via **NextAuth.js**.
 
 - ✅ **File handling and processing** → **AWS S3 integration** for **receipt uploads**.
@@ -157,7 +178,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ### Sign In
 
-- Users sign in using email and password or **GitHub OAuth** via the login page.
+- Users sign in using **email and password** or **GitHub OAuth** via the login page.
 - Upon signing in, users are redirected to their **Dashboard**.
 
 ![Login Screenshot](./pictures/login.png)
@@ -171,7 +192,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
   - Sign out button
   - List of groups cards
   - Each group card display avator of users belong to the group
-  - Buttons card to **Create** a new Group**
+  - Buttons card to **Create** a new Group\*\*
 
 ![Dashboard Screenshot](./pictures/dashboard.png)
 
@@ -185,8 +206,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - Right panel: List of all submitted expenses with the information below:
   - Who paid, amount, participants, timestamp, and view image link (optional)
   - Options to **Delete** each expense
-- Only Group creator have the clickable **Settle** button. 
-
+- Only Group creator have the clickable **Settle** button.
 
 ![Group Page Screenshot](./pictures/group_page.png)
 
@@ -199,6 +219,13 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
   - Description, amount, category, and optional receipt upload
 
 ![Expense Form Screenshot](./pictures/expense_form.png)
+
+---
+
+## Video Demo
+
+A demonstration video of using the app is available at the followng link:
+[Watch the demo video](https://www.youtube.com/watch?v=G1jJc9OkhYY)
 
 ---
 
@@ -218,7 +245,13 @@ This section describes how to set up the development environment, configure the 
 cd tripmate
 ```
 
-2. Install dependencies and start the development server:
+2. Run the prisma db:
+
+```bash
+npx prisma migrate dev --name init
+```
+
+3. Install dependencies and start the development server:
 
 ```bash
 npm install
@@ -295,6 +328,7 @@ AWS_BUCKET=my-receipt-storage
 ## 4. Local Development & Testing
 
 - Start the development server:
+
   ```bash
   npm run dev
   ```
@@ -302,29 +336,32 @@ AWS_BUCKET=my-receipt-storage
 - Make changes to components such as `app/page.tsx` — the page will auto-update.
 - This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to load the [Geist](https://vercel.com/font) font for a clean, modern UI.
 
-
-## Team Contribution 
+## Team Contribution
 
 ### **Hanzhen Xu: Backend & Authentication**
+
 - Set up the **PostgreSQL database schema** using Prisma ORM.
 - Implemented **user authentication** using BetterAuth with GitHub OAuth.
 - Handled backend **database operations** and **session validation**.
 - Created Group Demo
+
 ### **Lond Zhuang: Frontend & Cloud Integration**
+
 - Developed and styled core UI components with **Next.js frontend** using Tailwind CSS and shadcn/ui components.
 - Integrated **AWS S3** for **secure receipt image storage**.
 - Crafted Final Report
 
 ### **Joint Responsibilities**
+
 - Collaborated on frontend-backend integration.
 - Conducted bug fixes, code cleanup, and optimizations.
 - Reviewing each other’s code to ensure best practices.
 
 ## Lessons Learned and Concluding Remark
+
 This Project helped us strengthen our understanding of full-stack web development using Next.js, PostgreSQL, and cloud services like AWS S3. We gained hands-on experience with authentication flows, database schema design, file uploads, and team-based collaboration using Git.
 
-Throughout development, we encountered and overcame async data handling, and UI/UX improvements. These experiences deepened our appreciation for clean architecture, modular design, and testing practices.
-
+Throughout development, we encountered and overcame, server/client side separation, async data handling, and UI/UX improvements. These experiences deepened our appreciation for clean architecture, modular design, and testing practices.
 
 ## Learn More
 
@@ -335,9 +372,8 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+<!-- ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details. -->
